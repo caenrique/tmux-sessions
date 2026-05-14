@@ -266,7 +266,8 @@ list_branches() {
 
   local_branches=$(git -C "$repo_path" branch --format '%(refname:short)')
   remote_branches=$(git -C "$repo_path" branch -r --format '%(refname:short)' \
-    | grep -v "$remote/HEAD")
+    | grep "^$remote/" \
+    | grep -v "^$remote/HEAD$")
 
   remote_only=$(comm -23 \
     <(printf '%s\n' "$remote_branches" | sed "s|^$remote/||" | sort) \
