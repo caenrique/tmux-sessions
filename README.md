@@ -125,3 +125,7 @@ When you create a worktree via `Ctrl-W`, the new directory is placed as a siblin
 ## Recency ranking
 
 The picker ranks entries by how recently and frequently you've opened them. Each time you switch to a session, its score increases by 1. Scores decay with a configurable half-life (default: 7 days), so sessions you haven't touched in a while gradually sink below more active ones. Entries in the same repository get a small boost relative to your current working directory.
+
+---
+
+*This plugin was built with the help of [Claude](https://claude.ai).*
