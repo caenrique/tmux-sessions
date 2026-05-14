@@ -126,6 +126,19 @@ When you create a worktree via `Ctrl-W`, the new directory is placed as a siblin
 
 The picker ranks entries by how recently and frequently you've opened them. Each time you switch to a session, its score increases by 1. Scores decay with a configurable half-life (default: 7 days), so sessions you haven't touched in a while gradually sink below more active ones. Entries in the same repository get a small boost relative to your current working directory.
 
+## See also
+
+| | tmux-sessions | [tmux-sessionizer](https://github.com/ThePrimeagen/tmux-sessionizer) | [tmux-fzf](https://github.com/sainnhe/tmux-fzf) | [tmux-project](https://github.com/sei40kr/tmux-project) |
+|---|---|---|---|---|
+| Session switching | ✓ | ✓ | ✓ | ✓ |
+| Project discovery | ✓ | ✓ | — | ✓ |
+| Recency ranking | ✓ | — | — | — |
+| Git worktree management | ✓ | — | — | — |
+| Branch picker | ✓ | — | — | — |
+| Window/pane management | — | — | ✓ | — |
+
+**tmux-sessionizer** is the go-to if you want something minimal and scriptable. **tmux-fzf** is a better fit if you also need window and pane management. **tmux-project** is similar in scope to tmux-sessions but without worktree support. Choose this plugin if your workflow revolves around git worktrees and you want everything — project discovery, session switching, and branch management — in one picker.
+
 ---
 
 *This plugin was built with the help of [Claude](https://claude.ai).*
