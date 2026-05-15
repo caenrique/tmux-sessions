@@ -4,19 +4,42 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Testing
 
-There is no test suite. Test changes by reloading the plugin inside a live tmux session:
+The test suite lives in `tests/` and runs under [bats-core](https://github.com/bats-core/bats-core). Install the runner from your package manager:
 
 ```sh
-tmux source ~/.config/tmux/tmux.conf
+brew install bats-core
+# or on Debian/Ubuntu:
+sudo apt-get install bats
 ```
 
-Then trigger the picker with the configured key (default `Ctrl+Shift+S`). To test a specific script directly:
+`tests/test_helper.bash` ships a minimal portable assertion library, so `bats-support` / `bats-assert` / `bats-file` are not required.
+
+Run the full suite or a single file:
+
+```sh
+bats tests/                                    # everything
+bats tests/common.bats                         # one file
+bats --filter "format_session_name" tests/     # one function
+bats --print-output-on-failure tests/          # show captured output on failure
+```
+
+For ad-hoc smoke checks, you can still drive a script directly:
 
 ```sh
 TMUX_SESSIONS_PROJECTS_DIRS="$HOME/Projects" \
 TMUX_SESSIONS_ICON_STYLE=nerd \
 bash scripts/sessions.sh
 ```
+
+## Test policy
+
+Every bug fix and every new feature MUST update `tests/` to cover the changed behaviour, and `bats tests/` MUST pass before the change is committed. A change is not done until the test suite is green.
+
+- New function in `scripts/<name>.sh` → add cases to `tests/<name>.bats`.
+- New external dependency invoked by the scripts → add a programmable stub under `tests/fixtures/bin/` and a loader hook in `tests/test_helper.bash`.
+- Regression fixes → add a failing test first, then make it pass.
+
+CI runs the suite on Linux and macOS for every push and pull request via `.github/workflows/tests.yml`.
 
 ## Architecture
 
