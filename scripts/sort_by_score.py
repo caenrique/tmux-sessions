@@ -31,8 +31,8 @@ import sys
 import time
 
 
-def load_scores(path, now, half_life_secs):
-    scores = {}
+def load_scores(path: str, now: float, half_life_secs: float) -> dict[str, float]:
+    scores: dict[str, float] = {}
     if not path:
         return scores
     try:
@@ -54,7 +54,7 @@ def load_scores(path, now, half_life_secs):
     return scores
 
 
-def common_prefix_len(a, b):
+def common_prefix_len(a: str, b: str) -> int:
     n = min(len(a), len(b))
     for i in range(n):
         if a[i] != b[i]:
@@ -62,21 +62,21 @@ def common_prefix_len(a, b):
     return n
 
 
-def main():
-    boost_path = sys.argv[1] if len(sys.argv) > 1 else ""
-    score_file = os.environ.get("SCORE_FILE", "")
-    half_life_days = float(os.environ.get("TMUX_SESSIONS_SCORE_HALF_LIFE") or 14)
-    path_boost = float(os.environ.get("TMUX_SESSIONS_SCORE_PATH_BOOST") or 1.0)
+def main() -> None:
+    boost_path: str = sys.argv[1] if len(sys.argv) > 1 else ""
+    score_file: str = os.environ.get("SCORE_FILE", "")
+    half_life_days: float = float(os.environ.get("TMUX_SESSIONS_SCORE_HALF_LIFE") or 14)
+    path_boost: float = float(os.environ.get("TMUX_SESSIONS_SCORE_PATH_BOOST") or 1.0)
 
-    half_life_secs = half_life_days * 24 * 3600
-    now = time.time()
-    scores = load_scores(score_file, now, half_life_secs)
+    half_life_secs: float = half_life_days * 24 * 3600
+    now: float = time.time()
+    scores: dict[str, float] = load_scores(score_file, now, half_life_secs)
 
-    rows = []
-    for idx, line in enumerate(sys.stdin):
-        line = line.rstrip("\n")
+    rows: list[tuple[float, int, str]] = []
+    for idx, raw in enumerate(sys.stdin):
+        line = raw.rstrip("\n")
         cols = line.split("\t")
-        score = scores.get(cols[0], 0.0)
+        score: float = scores.get(cols[0], 0.0)
         if boost_path and len(cols) >= 3 and cols[2]:
             cpl = common_prefix_len(boost_path, cols[2])
             score += (cpl / 120.0) * path_boost
@@ -84,10 +84,9 @@ def main():
         rows.append((-score, idx, line))
 
     rows.sort()
-    out = sys.stdout
     for _, _, line in rows:
-        out.write(line)
-        out.write("\n")
+        sys.stdout.write(line)
+        sys.stdout.write("\n")
 
 
 if __name__ == "__main__":
