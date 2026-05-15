@@ -281,7 +281,9 @@ setup() {
   assert_success
   # main is local AND a remote ref — should appear only once.
   count=0
-  for line in "${lines[@]}"; do [[ "$line" == "main" ]] && (( count++ )); done
+  # `((count++))` returns the old value, so the first hit exits 1 and trips
+  # bats' errexit on bash 5+. `((++count))` returns the new value (≥1).
+  for line in "${lines[@]}"; do [[ "$line" == "main" ]] && (( ++count )); done
   (( count == 1 ))
 }
 

@@ -18,7 +18,9 @@ _wait_for_curl() {
       return 0
     fi
     sleep 0.1
-    (( elapsed++ ))
+    # ((elapsed++)) returns the old value (0 → exit 1) and trips bats' errexit
+    # on bash 5. ((++elapsed)) returns the new value, which is ≥1.
+    (( ++elapsed ))
   done
   return 1
 }
