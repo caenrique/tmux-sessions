@@ -85,3 +85,4 @@ The plugin is three bash scripts and one TPM entry point:
 - `format_session_name` strips configured prefixes then replaces `$HOME` with `~`. Session names may contain dots; tmux silently converts them to underscores, so comparisons use `${name//./_}`.
 - Use conventional commits for commit messages
 - Always check if the README.md needs to be updated after a fix or a new feature
+- Never run `git push` (or any other publishing command) on your own. Commit locally when asked, then stop and let the user push.
